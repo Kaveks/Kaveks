@@ -11,7 +11,7 @@
 
 - 👨‍💻 All of my projects are available at [https://know-patrick.vercel.app/](https://know-patrick.vercel.app/)
 
-- 💬 Ask me about **Docker,Bash sripting,python,django,React,Nextjs,Typescript,Tailwindcss**
+- 💬 Ask me about **Docker,Bash scripting,python,django,React,Nextjs,Typescript,Tailwindcss**
 
 - 📫 How to reach me **pkaveks2@gmail.com**
 
