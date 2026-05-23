@@ -38,8 +38,9 @@ def fetch_yearly_contributions_graphql(username, token):
         query($login: String!, $from: DateTime!, $to: DateTime!) {
           user(login: $login) {
             contributionsCollection(from: $from, to: $to) {
+              totalCommitContributions
+              restrictedContributionsCount
               contributionCalendar {
-                totalContributions
                 weeks { contributionDays { date contributionCount } }
               }
             }
@@ -51,16 +52,13 @@ def fetch_yearly_contributions_graphql(username, token):
             {"login": username, "from": from_date, "to": to_date},
             token,
         )
-        cal = result["data"]["user"]["contributionsCollection"]["contributionCalendar"]
-        year_total = 0
-        for week in cal["weeks"]:
+        col = result["data"]["user"]["contributionsCollection"]
+        yearly[year] = col["totalCommitContributions"] + col["restrictedContributionsCount"]
+        for week in col["contributionCalendar"]["weeks"]:
             for day in week["contributionDays"]:
                 d = datetime.fromisoformat(day["date"])
-                count = day["contributionCount"]
-                monthly[(d.year, d.month)] += count
                 if d.year == year:
-                    year_total += count
-        yearly[year] = year_total
+                    monthly[(d.year, d.month)] += day["contributionCount"]
     return {"yearly": yearly, "monthly": dict(monthly)}
 
 
@@ -116,8 +114,8 @@ def plot_contributions(data, username, output_path, years_window=10):
         yearly = {current_year: 0}
     years = sorted(yearly.keys())
 
-    bg = "#ffffff"; ax_bg = "#f6f8fa"; fg = "#24292f"; accent = "#0969da"; grid = "#d0d7de"
-    plt.style.use("default")
+    bg = "#1a1b27"; ax_bg = "#1a1b27"; fg = "#a9b1d6"; accent = "#7aa2f7"; grid = "#2a2e3f"
+    plt.style.use("dark_background")
     plt.rcParams.update({
         "figure.facecolor": bg, "axes.facecolor": ax_bg, "axes.edgecolor": grid,
         "axes.labelcolor": fg, "text.color": fg, "xtick.color": fg, "ytick.color": fg,
@@ -132,8 +130,8 @@ def plot_contributions(data, username, output_path, years_window=10):
     ax_heat.set_facecolor(ax_bg)
 
     counts = [yearly.get(y, 0) for y in years]
-    bars = ax_bar.bar(years, counts, color=accent, edgecolor=ax_bg, linewidth=1.5)
-    ax_bar.set_title("Contributions per year", fontsize=12, fontweight="bold", pad=10, color=fg)
+    bars = ax_bar.bar(years, counts, color=accent, edgecolor=bg, linewidth=1.5)
+    ax_bar.set_title("Commits per year", fontsize=12, fontweight="bold", pad=10, color=fg)
     ax_bar.set_xticks(years)
     ax_bar.set_xticklabels([str(y) for y in years], rotation=45, ha="right", fontsize=9, color=fg)
     ax_bar.tick_params(colors=fg)
@@ -141,7 +139,7 @@ def plot_contributions(data, username, output_path, years_window=10):
     ax_bar.spines["right"].set_visible(False)
     for spine in ("left", "bottom"):
         ax_bar.spines[spine].set_edgecolor(grid)
-    ax_bar.grid(axis="y", color=grid, linestyle="-", linewidth=0.5, alpha=0.8)
+    ax_bar.grid(axis="y", color=grid, linestyle="-", linewidth=0.5, alpha=0.5)
     ax_bar.set_axisbelow(True)
     for bar, c in zip(bars, counts):
         if c > 0:
@@ -154,9 +152,9 @@ def plot_contributions(data, username, output_path, years_window=10):
         for m in range(1, 13):
             matrix[i, m - 1] = monthly.get((y, m), 0)
     vmax = max(matrix.max(), 1)
-    im = ax_heat.imshow(matrix, aspect="auto", cmap="Blues", vmin=0, vmax=vmax,
+    im = ax_heat.imshow(matrix, aspect="auto", cmap="viridis", vmin=0, vmax=vmax,
                        interpolation="nearest")
-    ax_heat.set_title("Contributions by month", fontsize=12, fontweight="bold", pad=10, color=fg)
+    ax_heat.set_title("Activity by month", fontsize=12, fontweight="bold", pad=10, color=fg)
     ax_heat.set_xticks(range(12))
     ax_heat.set_xticklabels(["Jan","Feb","Mar","Apr","May","Jun",
                              "Jul","Aug","Sep","Oct","Nov","Dec"], fontsize=9, color=fg)
@@ -169,7 +167,7 @@ def plot_contributions(data, username, output_path, years_window=10):
         for j in range(matrix.shape[1]):
             v = int(matrix[i, j])
             if v > 0:
-                color = fg if v < vmax * 0.6 else "white"
+                color = fg if v < vmax * 0.7 else bg
                 ax_heat.text(j, i, str(v), ha="center", va="center", fontsize=7, color=color)
     cbar = fig.colorbar(im, ax=ax_heat, fraction=0.025, pad=0.02)
     cbar.ax.tick_params(colors=fg, labelsize=8)
@@ -179,6 +177,7 @@ def plot_contributions(data, username, output_path, years_window=10):
     fig.suptitle(f"@{username}  -  {total:,} contributions across {len(years)} years",
                  fontsize=14, fontweight="bold", y=1.02, color=fg)
     plt.savefig(output_path, dpi=150, bbox_inches="tight", facecolor=bg, edgecolor="none")
+    plt.close(fig)
     print(f"Saved {output_path}")
 
 
