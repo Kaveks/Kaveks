@@ -30,7 +30,7 @@ When updating the README's tech stack section, these are the real tools — don'
 
 - **Languages:** TypeScript, JavaScript, Python, Kotlin, Bash
 - **Frontend:** React, Next.js, Tailwind CSS, shadcn/ui, Redux
-- **Backend:** Django, FastAPI, Node.js, PostgreSQL, MongoDB, Redis, RabbitMQ, Celery
+- **Backend:** Django, Django Ninja, FastAPI, Node.js, PostgreSQL, MongoDB, Redis, RabbitMQ, Celery
 - **DevOps/Cloud:** Docker, Kubernetes, AWS, GCP, Jenkins, Linux, Nginx, Grafana
 - **Tools:** Git, Figma, Postman
 - **Currently learning:** Kotlin Multiplatform, Mifos Mobile, Fineract, Mifos Wallet
