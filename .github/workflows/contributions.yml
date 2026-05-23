@@ -57,7 +57,6 @@ jobs:
             mv contributions.png "$NEW_NAME"
             git add "$NEW_NAME"
             sed -i -E "s|contributions_[a-f0-9]{7}\.png|${NEW_NAME}|g" README.md
-            sed -i -E "s|contributions\.png(\?v=[0-9]*)?|${NEW_NAME}|g" README.md
             git add README.md
             git commit -m "chore: update contribution graph [${HASH}]"
             git push
