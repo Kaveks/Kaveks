@@ -52,11 +52,15 @@ def fetch_yearly_contributions_graphql(username, token):
             token,
         )
         cal = result["data"]["user"]["contributionsCollection"]["contributionCalendar"]
-        yearly[year] = cal["totalContributions"]
+        year_total = 0
         for week in cal["weeks"]:
             for day in week["contributionDays"]:
                 d = datetime.fromisoformat(day["date"])
-                monthly[(d.year, d.month)] += day["contributionCount"]
+                count = day["contributionCount"]
+                monthly[(d.year, d.month)] += count
+                if d.year == year:
+                    year_total += count
+        yearly[year] = year_total
     return {"yearly": yearly, "monthly": dict(monthly)}
 
 
