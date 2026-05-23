@@ -1,10 +1,10 @@
 <h1 align="center">Hi, I'm Patrick Mbugua 👋</h1>
-<h3 align="center">Frontend Developer · Kenya 🇰🇪</h3>
+<h3 align="center">Fullstack Developer · Kenya 🇰🇪</h3>
 
 <p align="center">
   <img src="https://komarev.com/ghpvc/?username=kaveks&label=Profile%20views&color=0e75b6&style=flat" alt="Profile views" />
-  <a href="https://twitter.com/patokaveks">
-    <img src="https://img.shields.io/twitter/follow/patokaveks?logo=twitter&style=flat&color=1DA1F2" alt="Twitter follow" />
+  <a href="https://www.linkedin.com/in/254pmk" target="_blank">
+    <img src="https://img.shields.io/badge/Follow%20on%20LinkedIn-0A66C2?style=flat&logo=linkedin&logoColor=white" alt="Follow on LinkedIn" />
   </a>
 </p>
 
@@ -20,7 +20,7 @@
 ### Connect
 
 <p>
-  <a href="https://linkedin.com/in/254pmk" target="_blank">
+  <a href="https://www.linkedin.com/in/254pmk" target="_blank">
     <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
   </a>
   <a href="https://twitter.com/patokaveks" target="_blank">
@@ -78,28 +78,32 @@
 
 ---
 
+### Trophies
+
+<p align="center">
+  <a href="https://github.com/ryo-ma/github-profile-trophy">
+    <img src="https://github-profile-trophy.vercel.app/?username=kaveks&theme=tokyonight&no-frame=true&row=2&column=4&margin-w=8&margin-h=8&title=Stars,Followers,Commits,Repositories,PullRequest,Reviews,Issues,MultipleLang" alt="Trophies" />
+  </a>
+</p>
+
 ### GitHub stats
 
 <p align="center">
-  <img height="170" src="https://github-readme-stats.vercel.app/api?username=kaveks&show_icons=true&theme=tokyonight&hide_border=true&count_private=true" alt="Patrick's stats" />
-  <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=kaveks&layout=compact&theme=tokyonight&hide_border=true&langs_count=8" alt="Top languages" />
+  <img height="170" src="https://github-readme-stats-eight-theta.vercel.app/api?username=kaveks&show_icons=true&theme=tokyonight&hide_border=true&count_private=true&include_all_commits=true" alt="Patrick's stats" />
+  <img height="170" src="https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=kaveks&layout=compact&theme=tokyonight&hide_border=true&langs_count=8" alt="Top languages" />
 </p>
 
 <p align="center">
   <img src="https://streak-stats.demolab.com?user=kaveks&theme=tokyonight&hide_border=true" alt="GitHub streak" />
 </p>
 
-### Contribution graph
+### Contribution history (last 10 years)
 
 <p align="center">
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=kaveks&theme=tokyo-night&hide_border=true&area=true" alt="Activity graph" />
+  <img src="contributions.png" alt="Multi-year contribution graph" />
 </p>
 
-<p align="center">
-  <a href="https://github.com/ryo-ma/github-profile-trophy">
-    <img src="https://github-profile-trophy.vercel.app/?username=kaveks&theme=tokyonight&no-frame=true&row=1&column=7" alt="Trophies" />
-  </a>
-</p>
+> Generated with `generate_contributions.py` — see the script in this repo. Re-run it periodically (or wire it into a GitHub Action) to keep the chart fresh.
 
 ---
 
