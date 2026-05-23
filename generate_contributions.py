@@ -202,9 +202,11 @@
 # if __name__ == "__main__":
 #     main()
 
-
 """
 Generate a multi-year GitHub contribution visualization.
+
+Uses GitHub's contributionCalendar.totalContributions — the same metric
+that powers the green-squares graph on your GitHub profile page.
 
 Usage:
     python generate_contributions.py <github_username> [github_token]
@@ -231,8 +233,7 @@ def fetch_yearly_contributions_graphql(username, token):
     start_year = int(created_at[:4])
     current_year = datetime.now(timezone.utc).year
 
-    yearly_commits = {}      # commits only - aligns with README stats card "Total Commits"
-    yearly_all = {}          # all contributions (commits + issues + PRs + reviews)
+    yearly = {}
     monthly = defaultdict(int)
 
     for year in range(start_year, current_year + 1):
@@ -244,7 +245,6 @@ def fetch_yearly_contributions_graphql(username, token):
         query($login: String!, $from: DateTime!, $to: DateTime!) {
           user(login: $login) {
             contributionsCollection(from: $from, to: $to) {
-              totalCommitContributions
               contributionCalendar {
                 totalContributions
                 weeks { contributionDays { date contributionCount } }
@@ -258,20 +258,14 @@ def fetch_yearly_contributions_graphql(username, token):
             {"login": username, "from": from_date, "to": to_date},
             token,
         )
-        coll = result["data"]["user"]["contributionsCollection"]
-        cal = coll["contributionCalendar"]
-        yearly_commits[year] = coll["totalCommitContributions"]
-        yearly_all[year] = cal["totalContributions"]
+        cal = result["data"]["user"]["contributionsCollection"]["contributionCalendar"]
+        yearly[year] = cal["totalContributions"]
         for week in cal["weeks"]:
             for day in week["contributionDays"]:
                 d = datetime.fromisoformat(day["date"])
                 if d.year == year:
                     monthly[(d.year, d.month)] += day["contributionCount"]
-    return {
-        "yearly": yearly_commits,       # primary metric: commits, matches README stats
-        "yearly_all": yearly_all,       # full contributions (kept for reference)
-        "monthly": dict(monthly),
-    }
+    return {"yearly": yearly, "monthly": dict(monthly)}
 
 
 def _graphql_request(query, variables, token):
@@ -313,11 +307,7 @@ def fetch_recent_events_rest(username):
     yearly = defaultdict(int)
     for (y, _), v in monthly.items():
         yearly[y] += v
-    return {
-        "yearly": dict(yearly),
-        "yearly_all": dict(yearly),
-        "monthly": dict(monthly),
-    }
+    return {"yearly": dict(yearly), "monthly": dict(monthly)}
 
 
 def plot_contributions(data, username, output_path, years_window=None):
@@ -352,7 +342,7 @@ def plot_contributions(data, username, output_path, years_window=None):
 
     counts = [yearly.get(y, 0) for y in years]
     bars = ax_bar.bar(years, counts, color=accent, edgecolor=bg, linewidth=1.5)
-    ax_bar.set_title("Commits per year", fontsize=12, fontweight="bold", pad=10, color=fg)
+    ax_bar.set_title("Contributions per year", fontsize=12, fontweight="bold", pad=10, color=fg)
     ax_bar.set_xticks(years)
     ax_bar.set_xticklabels([str(y) for y in years], rotation=45, ha="right", fontsize=9, color=fg)
     ax_bar.tick_params(colors=fg)
@@ -398,7 +388,7 @@ def plot_contributions(data, username, output_path, years_window=None):
 
     total = sum(yearly.values())
     span = f"{years[0]}\u2013{years[-1]}" if len(years) > 1 else f"{years[0]}"
-    fig.suptitle(f"@{username}  \u2014  {total:,} commits  \u2014  {span}",
+    fig.suptitle(f"@{username}  \u2014  {total:,} contributions  \u2014  {span}",
                  fontsize=14, fontweight="bold", y=1.02, color="#ffffff")
     plt.savefig(output_path, dpi=150, bbox_inches="tight", facecolor=bg, edgecolor="none")
     plt.close(fig)
@@ -419,6 +409,8 @@ def main():
             data = fetch_recent_events_rest(username)
     else:
         data = fetch_recent_events_rest(username)
+    # years_window=None = full account history (creation year -> now).
+    # Pass an integer (e.g. 10) to limit the chart to the last N years.
     plot_contributions(data, username, "contributions.png", years_window=None)
 
 
