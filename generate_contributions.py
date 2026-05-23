@@ -38,12 +38,8 @@ def fetch_yearly_contributions_graphql(username, token):
         query($login: String!, $from: DateTime!, $to: DateTime!) {
           user(login: $login) {
             contributionsCollection(from: $from, to: $to) {
-              totalCommitContributions
-              totalIssueContributions
-              totalPullRequestContributions
-              totalPullRequestReviewContributions
-              restrictedContributionsCount
               contributionCalendar {
+                totalContributions
                 weeks { contributionDays { date contributionCount } }
               }
             }
@@ -55,15 +51,9 @@ def fetch_yearly_contributions_graphql(username, token):
             {"login": username, "from": from_date, "to": to_date},
             token,
         )
-        col = result["data"]["user"]["contributionsCollection"]
-        yearly[year] = (
-            col["totalCommitContributions"]
-            + col["totalIssueContributions"]
-            + col["totalPullRequestContributions"]
-            + col["totalPullRequestReviewContributions"]
-            + col["restrictedContributionsCount"]
-        )
-        for week in col["contributionCalendar"]["weeks"]:
+        cal = result["data"]["user"]["contributionsCollection"]["contributionCalendar"]
+        yearly[year] = cal["totalContributions"]
+        for week in cal["weeks"]:
             for day in week["contributionDays"]:
                 d = datetime.fromisoformat(day["date"])
                 if d.year == year:

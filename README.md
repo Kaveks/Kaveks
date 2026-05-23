@@ -100,7 +100,7 @@
   <img src="https://streak-stats.demolab.com?user=kaveks&theme=tokyonight&hide_border=true" alt="GitHub streak" />
 </p>
 
-### Contribution history (last 10 years)
+### Contribution history
 
 <p align="center">
   <img src="contributions.png?v=1779543910" alt="Multi-year contribution graph — auto-updated daily by GitHub Actions" />
