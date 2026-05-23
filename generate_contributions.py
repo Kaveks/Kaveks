@@ -38,12 +38,13 @@ def fetch_yearly_contributions_graphql(username, token):
         query($login: String!, $from: DateTime!, $to: DateTime!) {
           user(login: $login) {
             contributionsCollection(from: $from, to: $to) {
+              totalCommitContributions
+              totalIssueContributions
+              totalPullRequestContributions
+              totalPullRequestReviewContributions
+              restrictedContributionsCount
               contributionCalendar {
                 weeks { contributionDays { date contributionCount } }
-              }
-              commitContributionsByRepository(maxRepositories: 100) {
-                repository { nameWithOwner }
-                contributions { totalCount }
               }
             }
           }
@@ -55,22 +56,18 @@ def fetch_yearly_contributions_graphql(username, token):
             token,
         )
         col = result["data"]["user"]["contributionsCollection"]
-        year_total = 0
+        yearly[year] = (
+            col["totalCommitContributions"]
+            + col["totalIssueContributions"]
+            + col["totalPullRequestContributions"]
+            + col["totalPullRequestReviewContributions"]
+            + col["restrictedContributionsCount"]
+        )
         for week in col["contributionCalendar"]["weeks"]:
             for day in week["contributionDays"]:
                 d = datetime.fromisoformat(day["date"])
-                count = day["contributionCount"]
                 if d.year == year:
-                    year_total += count
-                    monthly[(d.year, d.month)] += count
-
-        profile_repo = f"{username}/{username}".lower()
-        for rc in col.get("commitContributionsByRepository", []):
-            if rc["repository"]["nameWithOwner"].lower() == profile_repo:
-                year_total = max(0, year_total - rc["contributions"]["totalCount"])
-                break
-
-        yearly[year] = year_total
+                    monthly[(d.year, d.month)] += day["contributionCount"]
     return {"yearly": yearly, "monthly": dict(monthly)}
 
 
@@ -111,7 +108,7 @@ def fetch_recent_events_rest(username):
                 monthly[(d.year, d.month)] += count
         page += 1
     yearly = defaultdict(int)
-    for (y, _m), v in monthly.items():
+    for (y, _), v in monthly.items():
         yearly[y] += v
     return {"yearly": dict(yearly), "monthly": dict(monthly)}
 
@@ -159,7 +156,7 @@ def plot_contributions(data, username, output_path, years_window=10):
                         f"{c:,}", ha="center", va="bottom", fontsize=8, color="#ffffff",
                         fontweight="bold")
 
-    heat_years = sorted({y for (y, _m) in monthly.keys()}) or years
+    heat_years = sorted({y for (y, _) in monthly.keys()}) or years
     matrix = np.zeros((len(heat_years), 12))
     for i, y in enumerate(heat_years):
         for m in range(1, 13):

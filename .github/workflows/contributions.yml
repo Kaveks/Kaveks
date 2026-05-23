@@ -41,7 +41,7 @@ jobs:
             echo "No changes to commit"
           else
             TIMESTAMP=$(date +%s)
-            sed -i "s|contributions\.png?v=[0-9]*|contributions.png?v=${TIMESTAMP}|g" README.md
+            sed -i -E "s|contributions\.png\?v=[0-9]+|contributions.png?v=${TIMESTAMP}|g" README.md
             git add contributions.png README.md
             git commit -m "chore: update contribution graph"
             git push
