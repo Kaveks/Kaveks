@@ -116,25 +116,31 @@ def plot_contributions(data, username, output_path, years_window=10):
         yearly = {current_year: 0}
     years = sorted(yearly.keys())
 
-    bg = "#ffffff"; fg = "#24292f"; accent = "#0969da"; grid = "#d0d7de"
+    bg = "#ffffff"; ax_bg = "#f6f8fa"; fg = "#24292f"; accent = "#0969da"; grid = "#d0d7de"
+    plt.style.use("default")
     plt.rcParams.update({
-        "figure.facecolor": bg, "axes.facecolor": "#f6f8fa", "axes.edgecolor": grid,
+        "figure.facecolor": bg, "axes.facecolor": ax_bg, "axes.edgecolor": grid,
         "axes.labelcolor": fg, "text.color": fg, "xtick.color": fg, "ytick.color": fg,
         "font.family": "DejaVu Sans",
     })
 
-    fig = plt.figure(figsize=(14, 5))
+    fig = plt.figure(figsize=(14, 5), facecolor=bg)
     gs = fig.add_gridspec(1, 2, width_ratios=[1, 2.2], wspace=0.15)
     ax_bar = fig.add_subplot(gs[0, 0])
     ax_heat = fig.add_subplot(gs[0, 1])
+    ax_bar.set_facecolor(ax_bg)
+    ax_heat.set_facecolor(ax_bg)
 
     counts = [yearly.get(y, 0) for y in years]
-    bars = ax_bar.bar(years, counts, color=accent, edgecolor="white", linewidth=1.5)
-    ax_bar.set_title("Contributions per year", fontsize=12, fontweight="bold", pad=10)
+    bars = ax_bar.bar(years, counts, color=accent, edgecolor=ax_bg, linewidth=1.5)
+    ax_bar.set_title("Contributions per year", fontsize=12, fontweight="bold", pad=10, color=fg)
     ax_bar.set_xticks(years)
-    ax_bar.set_xticklabels([str(y) for y in years], rotation=45, ha="right", fontsize=9)
+    ax_bar.set_xticklabels([str(y) for y in years], rotation=45, ha="right", fontsize=9, color=fg)
+    ax_bar.tick_params(colors=fg)
     ax_bar.spines["top"].set_visible(False)
     ax_bar.spines["right"].set_visible(False)
+    for spine in ("left", "bottom"):
+        ax_bar.spines[spine].set_edgecolor(grid)
     ax_bar.grid(axis="y", color=grid, linestyle="-", linewidth=0.5, alpha=0.8)
     ax_bar.set_axisbelow(True)
     for bar, c in zip(bars, counts):
@@ -150,12 +156,15 @@ def plot_contributions(data, username, output_path, years_window=10):
     vmax = max(matrix.max(), 1)
     im = ax_heat.imshow(matrix, aspect="auto", cmap="Blues", vmin=0, vmax=vmax,
                        interpolation="nearest")
-    ax_heat.set_title("Contributions by month", fontsize=12, fontweight="bold", pad=10)
+    ax_heat.set_title("Contributions by month", fontsize=12, fontweight="bold", pad=10, color=fg)
     ax_heat.set_xticks(range(12))
     ax_heat.set_xticklabels(["Jan","Feb","Mar","Apr","May","Jun",
-                             "Jul","Aug","Sep","Oct","Nov","Dec"], fontsize=9)
+                             "Jul","Aug","Sep","Oct","Nov","Dec"], fontsize=9, color=fg)
     ax_heat.set_yticks(range(len(heat_years)))
-    ax_heat.set_yticklabels([str(y) for y in heat_years], fontsize=9)
+    ax_heat.set_yticklabels([str(y) for y in heat_years], fontsize=9, color=fg)
+    ax_heat.tick_params(colors=fg)
+    for spine in ax_heat.spines.values():
+        spine.set_edgecolor(grid)
     for i in range(matrix.shape[0]):
         for j in range(matrix.shape[1]):
             v = int(matrix[i, j])
@@ -168,7 +177,7 @@ def plot_contributions(data, username, output_path, years_window=10):
 
     total = sum(yearly.values())
     fig.suptitle(f"@{username}  -  {total:,} contributions across {len(years)} years",
-                 fontsize=14, fontweight="bold", y=1.02)
+                 fontsize=14, fontweight="bold", y=1.02, color=fg)
     plt.savefig(output_path, dpi=150, bbox_inches="tight", facecolor=bg, edgecolor="none")
     print(f"Saved {output_path}")
 
