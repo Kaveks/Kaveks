@@ -14,7 +14,7 @@
 
 - 🌱 Currently learning **Kotlin Multiplatform**, and working on **Mifos Mobile**, **Fineract**, and **Mifos Wallet** infrastructure
 - 👨‍💻 Portfolio → **[know-patrick.vercel.app](https://know-patrick.vercel.app/)**
-- 💬 Ask me about **Kubernetes**, **Docker**, **Python/Django**, **React/Next.js**, **TypeScript**, **Tailwind CSS**, **Celery**, **RabbitMQ**, **Redis**
+- 💬 Ask me about **Kubernetes**, **Docker**, **Python/Django/FastAPI**, **React/Next.js**, **TypeScript**, **Tailwind CSS**, **shadcn/ui**, **Celery**, **RabbitMQ**, **Redis**
 - 📫 Reach me at **pkaveks2@gmail.com**
 
 ### Connect
@@ -48,13 +48,16 @@
 ![React](https://img.shields.io/badge/-React-61DAFB?style=flat-square&logo=react&logoColor=black)
 ![Next.js](https://img.shields.io/badge/-Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/-Tailwind%20CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![shadcn/ui](https://img.shields.io/badge/-shadcn%2Fui-000000?style=flat-square&logo=shadcnui&logoColor=white)
 ![Redux](https://img.shields.io/badge/-Redux-764ABC?style=flat-square&logo=redux&logoColor=white)
 
 **Backend**
 
 ![Django](https://img.shields.io/badge/-Django-092E20?style=flat-square&logo=django&logoColor=white)
+![FastAPI](https://img.shields.io/badge/-FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
 ![Node.js](https://img.shields.io/badge/-Node.js-339933?style=flat-square&logo=nodedotjs&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![MongoDB](https://img.shields.io/badge/-MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white)
 ![Redis](https://img.shields.io/badge/-Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
 ![RabbitMQ](https://img.shields.io/badge/-RabbitMQ-FF6600?style=flat-square&logo=rabbitmq&logoColor=white)
 ![Celery](https://img.shields.io/badge/-Celery-37814A?style=flat-square&logo=celery&logoColor=white)
@@ -100,10 +103,10 @@
 ### Contribution history (last 10 years)
 
 <p align="center">
-  <img src="contributions.png" alt="Multi-year contribution graph" />
+  <img src="contributions.png" alt="Multi-year contribution graph — auto-updated weekly by GitHub Actions" />
 </p>
 
-> Generated with `generate_contributions.py` — see the script in this repo. Re-run it periodically (or wire it into a GitHub Action) to keep the chart fresh.
+> Auto-regenerated every Monday by [`.github/workflows/contributions.yml`](.github/workflows/contributions.yml). The chart is committed back to this repo so the README always shows the latest data.
 
 ---
 
