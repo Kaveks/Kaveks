@@ -41,6 +41,10 @@ def fetch_yearly_contributions_graphql(username, token):
               contributionCalendar {
                 weeks { contributionDays { date contributionCount } }
               }
+              commitContributionsByRepository(maxRepositories: 100) {
+                repository { nameWithOwner }
+                contributions { totalCount }
+              }
             }
           }
         }
@@ -50,15 +54,22 @@ def fetch_yearly_contributions_graphql(username, token):
             {"login": username, "from": from_date, "to": to_date},
             token,
         )
-        cal = result["data"]["user"]["contributionsCollection"]["contributionCalendar"]
+        col = result["data"]["user"]["contributionsCollection"]
         year_total = 0
-        for week in cal["weeks"]:
+        for week in col["contributionCalendar"]["weeks"]:
             for day in week["contributionDays"]:
                 d = datetime.fromisoformat(day["date"])
                 count = day["contributionCount"]
                 if d.year == year:
                     year_total += count
                     monthly[(d.year, d.month)] += count
+
+        profile_repo = f"{username}/{username}".lower()
+        for rc in col.get("commitContributionsByRepository", []):
+            if rc["repository"]["nameWithOwner"].lower() == profile_repo:
+                year_total = max(0, year_total - rc["contributions"]["totalCount"])
+                break
+
         yearly[year] = year_total
     return {"yearly": yearly, "monthly": dict(monthly)}
 
@@ -115,7 +126,7 @@ def plot_contributions(data, username, output_path, years_window=10):
         yearly = {current_year: 0}
     years = sorted(yearly.keys())
 
-    bg = "#1a1b27"; ax_bg = "#1a1b27"; fg = "#a9b1d6"; accent = "#7aa2f7"; grid = "#2a2e3f"
+    bg = "#1a1b27"; ax_bg = "#1e2030"; fg = "#c0caf5"; accent = "#7aa2f7"; grid = "#3b4261"
     plt.style.use("dark_background")
     plt.rcParams.update({
         "figure.facecolor": bg, "axes.facecolor": ax_bg, "axes.edgecolor": grid,
@@ -145,7 +156,8 @@ def plot_contributions(data, username, output_path, years_window=10):
     for bar, c in zip(bars, counts):
         if c > 0:
             ax_bar.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
-                        f"{c:,}", ha="center", va="bottom", fontsize=8, color=fg)
+                        f"{c:,}", ha="center", va="bottom", fontsize=8, color="#ffffff",
+                        fontweight="bold")
 
     heat_years = sorted({y for (y, _m) in monthly.keys()}) or years
     matrix = np.zeros((len(heat_years), 12))
@@ -168,15 +180,16 @@ def plot_contributions(data, username, output_path, years_window=10):
         for j in range(matrix.shape[1]):
             v = int(matrix[i, j])
             if v > 0:
-                color = fg if v < vmax * 0.7 else bg
-                ax_heat.text(j, i, str(v), ha="center", va="center", fontsize=7, color=color)
+                color = "#ffffff" if v < vmax * 0.65 else "#1a1b27"
+                ax_heat.text(j, i, str(v), ha="center", va="center", fontsize=7, color=color,
+                             fontweight="bold")
     cbar = fig.colorbar(im, ax=ax_heat, fraction=0.025, pad=0.02)
     cbar.ax.tick_params(colors=fg, labelsize=8)
     cbar.outline.set_edgecolor(grid)
 
     total = sum(yearly.values())
-    fig.suptitle(f"@{username}  -  {total:,} contributions across {len(years)} years",
-                 fontsize=14, fontweight="bold", y=1.02, color=fg)
+    fig.suptitle(f"@{username}  —  {total:,} contributions across {len(years)} years",
+                 fontsize=14, fontweight="bold", y=1.02, color="#ffffff")
     plt.savefig(output_path, dpi=150, bbox_inches="tight", facecolor=bg, edgecolor="none")
     plt.close(fig)
     print(f"Saved {output_path}")
