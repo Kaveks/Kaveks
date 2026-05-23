@@ -38,8 +38,6 @@ def fetch_yearly_contributions_graphql(username, token):
         query($login: String!, $from: DateTime!, $to: DateTime!) {
           user(login: $login) {
             contributionsCollection(from: $from, to: $to) {
-              totalCommitContributions
-              restrictedContributionsCount
               contributionCalendar {
                 weeks { contributionDays { date contributionCount } }
               }
@@ -52,13 +50,16 @@ def fetch_yearly_contributions_graphql(username, token):
             {"login": username, "from": from_date, "to": to_date},
             token,
         )
-        col = result["data"]["user"]["contributionsCollection"]
-        yearly[year] = col["totalCommitContributions"] + col["restrictedContributionsCount"]
-        for week in col["contributionCalendar"]["weeks"]:
+        cal = result["data"]["user"]["contributionsCollection"]["contributionCalendar"]
+        year_total = 0
+        for week in cal["weeks"]:
             for day in week["contributionDays"]:
                 d = datetime.fromisoformat(day["date"])
+                count = day["contributionCount"]
                 if d.year == year:
-                    monthly[(d.year, d.month)] += day["contributionCount"]
+                    year_total += count
+                    monthly[(d.year, d.month)] += count
+        yearly[year] = year_total
     return {"yearly": yearly, "monthly": dict(monthly)}
 
 
@@ -131,7 +132,7 @@ def plot_contributions(data, username, output_path, years_window=10):
 
     counts = [yearly.get(y, 0) for y in years]
     bars = ax_bar.bar(years, counts, color=accent, edgecolor=bg, linewidth=1.5)
-    ax_bar.set_title("Commits per year", fontsize=12, fontweight="bold", pad=10, color=fg)
+    ax_bar.set_title("Contributions per year", fontsize=12, fontweight="bold", pad=10, color=fg)
     ax_bar.set_xticks(years)
     ax_bar.set_xticklabels([str(y) for y in years], rotation=45, ha="right", fontsize=9, color=fg)
     ax_bar.tick_params(colors=fg)
