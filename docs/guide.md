@@ -15,7 +15,7 @@ kaveks/
 ├── README.md                          # GitHub profile page
 ├── generate_contributions.py          # Chart generation script
 ├── contributions.png                  # Generated chart (committed by CI bot)
-├── Makefile                           # install and generate targets
+├── Makefile                           # install, generate, push, sync targets
 ├── requirements.txt                   # Pinned Python dependencies
 ├── .github/
 │   └── workflows/
@@ -92,7 +92,7 @@ Falls back to the public Events REST API. Only captures the last ~90 days. Usefu
 | `plot_contributions`                 | Renders the matplotlib figure and saves PNG |
 | `main`                               | Entry point — dispatches to GraphQL or REST |
 
-The chart uses a Tokyo Night dark color scheme (`#1a1b27` background, `#7aa2f7` accent, `viridis` heatmap colormap).
+The chart uses a light color scheme: white figure background (`#ffffff`), light gray axes (`#f6f8fa`), GitHub blue bars (`#0969da`), and a `Blues` heatmap colormap with dark text on light cells and white text on dark cells.
 
 ---
 
@@ -116,6 +116,8 @@ The chart uses a Tokyo Night dark color scheme (`#1a1b27` background, `#7aa2f7` 
 
 The workflow is idempotent — if the chart is unchanged since the last run, no commit is made.
 
+> **Why this causes local push rejections:** every push to `main` triggers the workflow, which commits `contributions.png` back to the remote. Your local branch is then behind by one commit. Always use `make push` (see below) instead of `git push` directly — it rebases before pushing.
+
 ### Required permissions
 
 The workflow needs `permissions: contents: write` (already present in the file). If it still fails to push with a 403:
@@ -123,6 +125,22 @@ The workflow needs `permissions: contents: write` (already present in the file).
 1. Go to the repo on GitHub
 2. Settings → Actions → General → Workflow permissions
 3. Select **Read and write permissions** → Save
+
+### Pushing local changes
+
+Never use `git push` directly — the CI bot will have committed `contributions.png` since your last pull and the push will be rejected. Use the Makefile target instead:
+
+```bash
+make push
+```
+
+This runs `git pull --rebase origin main` first, replaying your local commits on top of the bot's commit, then pushes cleanly. To regenerate the chart and push in one step:
+
+```bash
+make sync GH_TOKEN=<token>
+```
+
+`make sync` is equivalent to `make generate && make push`.
 
 ### Trigger manually
 
@@ -181,16 +199,18 @@ Only these tools should appear in the README badge section:
 
 ## Quick reference
 
-| Task                           | Command                                                  |
-| ------------------------------ | -------------------------------------------------------- |
-| Activate venv                  | `source .venv/bin/activate`                              |
-| Install dependencies           | `make install`                                           |
-| Regenerate chart (with token)  | `make generate GH_TOKEN=<token>`                         |
-| Regenerate chart (no token)    | `make generate`                                          |
-| Install + generate in one step | `make all GH_TOKEN=<token>`                              |
-| Preview README locally         | `pip install grip && grip README.md`                     |
-| Trigger workflow manually      | Actions tab → "Update contribution graph" → Run workflow |
-| Check workflow logs            | `gh run list --workflow=contributions.yml`               |
+| Task                              | Command                                                  |
+| --------------------------------- | -------------------------------------------------------- |
+| Activate venv                     | `source .venv/bin/activate`                              |
+| Install dependencies              | `make install`                                           |
+| Regenerate chart (with token)     | `make generate GH_TOKEN=<token>`                         |
+| Regenerate chart (no token)       | `make generate`                                          |
+| Install + generate in one step    | `make all GH_TOKEN=<token>`                              |
+| Push without rejection errors     | `make push`                                              |
+| Regenerate chart + push           | `make sync GH_TOKEN=<token>`                             |
+| Preview README locally            | `pip install grip && grip README.md`                     |
+| Trigger workflow manually         | Actions tab → "Update contribution graph" → Run workflow |
+| Check workflow logs               | `gh run list --workflow=contributions.yml`               |
 
 ---
 
@@ -200,5 +220,6 @@ Only these tools should appear in the README badge section:
 - Using the dead Heroku streak endpoint or the rate-limited canonical stats service
 - Replacing LinkedIn with Twitter as the primary follow action
 - Hardcoding a GitHub token anywhere in tracked files — pass it as an argument only
-- Committing `contributions.png` from a local run ahead of a CI bot run (causes merge conflicts)
+- Using `git push` directly — the CI bot's commit will have put the remote ahead; use `make push` instead
+- Committing `contributions.png` from a local run ahead of a CI bot run without pulling first
 - Restructuring the README into a single flat badge dump — the grouped layout is intentional
