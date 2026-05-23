@@ -44,13 +44,21 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
-          git add contributions.png
-          if git diff --staged --quiet; then
+
+          HASH=$(git rev-parse --short HEAD)
+          NEW_NAME="contributions_${HASH}.png"
+          CURRENT=$(git ls-files 'contributions_*.png' | head -1)
+
+          if [ -n "$CURRENT" ] && cmp -s contributions.png "$CURRENT"; then
             echo "No changes to commit"
+            rm contributions.png
           else
-            TIMESTAMP=$(date +%s)
-            sed -i -E "s|contributions\.png\?v=[0-9]+|contributions.png?v=${TIMESTAMP}|g" README.md
-            git add contributions.png README.md
-            git commit -m "chore: update contribution graph"
+            [ -n "$CURRENT" ] && git rm -f "$CURRENT"
+            mv contributions.png "$NEW_NAME"
+            git add "$NEW_NAME"
+            sed -i -E "s|contributions_[a-f0-9]{7}\.png|${NEW_NAME}|g" README.md
+            sed -i -E "s|contributions\.png(\?v=[0-9]*)?|${NEW_NAME}|g" README.md
+            git add README.md
+            git commit -m "chore: update contribution graph [${HASH}]"
             git push
           fi
