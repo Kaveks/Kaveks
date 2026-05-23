@@ -13,7 +13,8 @@ generate:
 	python3 generate_contributions.py $(GITHUB_USERNAME) $(GH_TOKEN)
 
 push:
-	git pull --rebase origin $(BRANCH)
+	git rebase --abort 2>/dev/null || true
+	git pull --rebase -X ours origin $(BRANCH)
 	git push -u origin $(BRANCH)
 
 sync: generate push
