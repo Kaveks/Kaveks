@@ -39,11 +39,11 @@ jobs:
 
       - name: Commit and push if changed
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
+          gh auth setup-git
 
           HASH=$(git rev-parse --short HEAD)
           NEW_NAME="contributions_${HASH}.png"
