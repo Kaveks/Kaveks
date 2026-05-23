@@ -106,7 +106,7 @@
   <img src="contributions.png" alt="Multi-year contribution graph — auto-updated weekly by GitHub Actions" />
 </p>
 
-> Auto-regenerated every Monday by [`.github/workflows/contributions.yml`](.github/workflows/contributions.yml). The chart is committed back to this repo so the README always shows the latest data.
+> Auto-regenerated everyday(midnight) by [`.github/workflows/contributions.yml`](.github/workflows/contributions.yml). The chart is committed back to this repo so the README always shows the latest data.
 
 ---
 
