@@ -186,9 +186,9 @@ def plot_contributions(data, username, output_path, years_window=None):
 
     total = sum(yearly.values())
     span = f"{years[0]}\u2013{years[-1]}" if len(years) > 1 else f"{years[0]}"
-    #fig.suptitle(f"@{username}  \u2014  {total:,} contributions  \u2014  {span}",
+    fig.suptitle(f"@{username}  \u2014  {total:,} contributions  \u2014  {span}",
     # remove the total contributions and just show the years span, since the total can be misleading if using the REST fallback which only covers ~90 days.
-    fig.suptitle(f"@{username}  contributions  \u2014  {span}",
+    #fig.suptitle(f"@{username}  contributions  \u2014  {span}",
                  fontsize=14, fontweight="bold", y=1.02, color="#ffffff")
     plt.savefig(output_path, dpi=150, bbox_inches="tight", facecolor=bg, edgecolor="none")
     plt.close(fig)
