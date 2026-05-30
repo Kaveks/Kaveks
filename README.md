@@ -104,7 +104,7 @@
 ### Contribution history
 
 <p align="center">
-  <img src="contributions_e2f8f6e.png" alt="Multi-year contribution graph — auto-updated daily by GitHub Actions" width="100%" />
+  <img src="contributions_537400f.png" alt="Multi-year contribution graph — auto-updated daily by GitHub Actions" width="100%" />
 </p>
 
 <!-- > Auto-regenerated everyday(midnight) by [`.github/workflows/contributions.yml`](.github/workflows/contributions.yml). The chart is committed back to this repo so the README always shows the latest data. -->
