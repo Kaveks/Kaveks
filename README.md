@@ -14,7 +14,7 @@
 
 - 🌱 Currently learning **Kotlin Multiplatform**, and working on **Mifos Mobile**, **Fineract**, and **Mifos Wallet** infrastructure
 - 👨‍💻 Portfolio → **[know-patrick.vercel.app](https://know-patrick.vercel.app/)**
-- 💬 Ask me about **Kubernetes**, **Docker**, **Python/Django/FastAPI**, **React/Next.js**, **TypeScript**, **Tailwind CSS**, **shadcn/ui**, **Celery**, **RabbitMQ**, **Redis**
+- 💬 Ask me about **Kubernetes**, **Docker**, **GitOps/Argo CD**, **Python/Django/FastAPI**, **React/Next.js**, **TypeScript**, **Tailwind CSS**, **shadcn/ui**, **Celery**, **RabbitMQ**, **Redis**
 - 📫 Reach me at **pkaveks2@gmail.com**
 
 ### Connect
@@ -67,8 +67,10 @@
 
 ![Docker](https://img.shields.io/badge/-Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
 ![Kubernetes](https://img.shields.io/badge/-Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white)
+![Argo CD](https://img.shields.io/badge/-Argo%20CD-EF7B4D?style=flat-square&logo=argo&logoColor=white)
 ![AWS](https://img.shields.io/badge/-AWS-232F3E?style=flat-square&logo=amazonwebservices&logoColor=white)
 ![GCP](https://img.shields.io/badge/-GCP-4285F4?style=flat-square&logo=googlecloud&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/-GitHub%20Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
 ![Jenkins](https://img.shields.io/badge/-Jenkins-D24939?style=flat-square&logo=jenkins&logoColor=white)
 ![Linux](https://img.shields.io/badge/-Linux-FCC624?style=flat-square&logo=linux&logoColor=black)
 ![Nginx](https://img.shields.io/badge/-Nginx-009639?style=flat-square&logo=nginx&logoColor=white)
@@ -86,7 +88,7 @@
 
 <p align="center">
   <a href="https://github.com/ryo-ma/github-profile-trophy">
-    <img src="https://github-profile-trophy.vercel.app/?username=kaveks&theme=tokyonight&no-frame=true&row=2&column=4&margin-w=8&margin-h=8&title=Stars,Followers,Commits,Repositories,PullRequest,Reviews,Issues,MultipleLang" alt="Trophies" />
+    <img src="https://github-profile-trophy-orcin-eta.vercel.app/?username=kaveks&theme=tokyonight&no-frame=true&row=2&column=4&margin-w=8&margin-h=8&title=Stars,Followers,Commits,Repositories,PullRequest,Reviews,Issues,MultipleLang" alt="Trophies" />
   </a>
 </p>
 

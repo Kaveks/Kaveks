@@ -31,7 +31,7 @@ When updating the README's tech stack section, these are the real tools — don'
 - **Languages:** TypeScript, JavaScript, Python, Kotlin, Bash
 - **Frontend:** React, Next.js, Tailwind CSS, shadcn/ui, Redux
 - **Backend:** Django, Django Ninja, FastAPI, Node.js, PostgreSQL, MongoDB, Redis, RabbitMQ, Celery
-- **DevOps/Cloud:** Docker, Kubernetes, AWS, GCP, Jenkins, Linux, Nginx, Grafana
+- **DevOps/Cloud:** Docker, Kubernetes, Argo CD (GitOps), AWS, GCP, GitHub Actions, Jenkins, Linux, Nginx, Grafana
 - **Tools:** Git, Figma, Postman
 - **Currently learning:** Kotlin Multiplatform, Mifos Mobile, Fineract, Mifos Wallet
 
@@ -76,6 +76,7 @@ The README has been deliberately cleaned up from a generator-spewed version. Whe
 - **Stats services:** use `github-readme-stats-eight-theta.vercel.app` (a community fork) instead of `github-readme-stats.vercel.app` — the canonical service rate-limits heavily and produces broken `camo.githubusercontent.com` URLs
 - **Streak stats:** use `streak-stats.demolab.com`, NOT the old `github-readme-streak-stats.herokuapp.com` (Heroku endpoint is dead)
 - **Trophy widget:** include `Reviews` in the `title=` parameter; place trophies BEFORE stats in document order
+- **Trophy endpoint:** the canonical `github-profile-trophy.vercel.app` is DEAD — it returns HTTP 402 `DEPLOYMENT_DISABLED` (Vercel disabled it over cost; the maintainer is asking for sponsorship). Use the volunteer mirror `github-profile-trophy-orcin-eta.vercel.app` — same query string, just swap the host. If that mirror dies too, the upstream README at `ryo-ma/github-profile-trophy` keeps a "Load balancing endpoints" list; as of 2026-09-11 only 3 of 12 listed mirrors actually worked. The permanent fix is self-hosting a fork on Vercel with a `read:user` + `public_repo` PAT.
 - **Follow buttons:** LinkedIn, not Twitter
 - **Section order:** intro → about → connect → tech stack → trophies → stats → contribution history → quote
 
