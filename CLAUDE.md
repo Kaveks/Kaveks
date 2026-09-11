@@ -11,7 +11,7 @@ It is NOT a typical application. It contains:
 - `README.md` — the profile README that visitors see
 - `generate_contributions.py` — Python script that fetches GitHub contribution data via the GraphQL API and renders a multi-year matplotlib chart
 - `contributions.png` — the generated chart, referenced by the README
-- `.github/workflows/contributions.yml` — GitHub Actions workflow that re-runs the script every Monday at 06:00 UTC and commits the updated PNG back to the repo
+- `.github/workflows/contributions.yml` — GitHub Actions workflow that re-runs the script daily at 00:00 UTC (cron `0 0 * * *`) and commits the updated PNG back to the repo. Deliberately does NOT trigger on `push` — the chart depends on contribution data, not on repo edits, and a push trigger made every manual commit race the bot. Use the Actions tab (`workflow_dispatch`) to force a refresh.
 
 ## About the developer
 
